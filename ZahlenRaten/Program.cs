@@ -1,27 +1,28 @@
 ﻿using System;
 class Program
 {
+    const int BoxBreite = 57;
     static void Main(string[] args)
     {
         bool nochmal = true;
 
+
         while (nochmal)
         {
             Console.Clear();
-            SpielRunden();
+            SpieleRunde();
 
-            ZeigeLinie();
-            Console.WriteLine(" |Willst du nochmal spielen? (j/n)                         |");
+            ZeigeZeile("Willst du nochmal spielen? (j/n)");
             ZeigeLinie();
             string weiter = Console.ReadLine();
             nochmal = weiter == "j";
         }
 
-        Console.WriteLine(" |Danke fürs Spielen!                                      |");
+        ZeigeZeile("Danke fürs Spielen!");
         ZeigeLinie();
     }
 
-    static void SpielRunden()
+    static void SpieleRunde()
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 101);
@@ -39,11 +40,9 @@ class Program
         Console.WriteLine("   /Ich habe mir eine Zahl zwischen 1 und 100 ausgedacht.\\");
         Console.WriteLine("  /              Kannst du sie erraten?                   \\");
         ZeigeLinie();
-        Console.WriteLine(" |Gib die Schwierigkeit ein (1-3):                         |");
-        Console.WriteLine(" |1 = Leicht (10 Versuche)                                 |");
-        Console.WriteLine(" |2 = Mittel (5 Versuche)                                  |");
-        Console.WriteLine(" |3 = Schwer (3 Versuche)                                  |");
-        ZeigeLinie();
+        ZeigeZeile("Gib die Schwierigkeit ein (1-3):");
+        ZeigeAuswahl();
+
         while (maxVersuche == 0)
         {
             schwierigkeit = Console.ReadLine();
@@ -54,79 +53,85 @@ class Program
             else
             {
                 ZeigeLinie();
-                Console.WriteLine(" |Ungültige Eingabe!                                       |");
-                Console.WriteLine(" |Bitte erneut eingeben:                                   |");
-                ZeigeLinie();
-                Console.WriteLine(" |1 = Leicht (10 Versuche)                                 |");
-                Console.WriteLine(" |2 = Mittel (5 Versuche)                                  |");
-                Console.WriteLine(" |3 = Schwer (3 Versuche)                                  |");
-                ZeigeLinie();
+                ZeigeZeile("Ungültige Eingabe!");
+                ZeigeZeile("Bitte erneut eingeben:");
+                ZeigeAuswahl();
             }
 
         }
 
         ZeigeLinie();
-        Console.WriteLine($" |Du hast {maxVersuche} Versuche!                                     |");
+        ZeigeZeile($"Du hast {maxVersuche} Versuche!");
+        ZeigeLinie();
 
-        while (erraten == false && versuche < maxVersuche)
+        while (!erraten && versuche < maxVersuche)
         {
 
-            Console.WriteLine(" |Gib deine Zahl ein:                                      |");
+            ZeigeZeile("Gib deine Zahl ein:");
             ZeigeLinie();
             input = Console.ReadLine();
             bool isNum = int.TryParse(input, out int number);
 
-            if (isNum == true)
+            if (isNum)
             {
                 versuche++;
 
                 if (number < randomNumber)
                 {
                     ZeigeLinie();
-                    Console.WriteLine(" |Die Zahl ist zu klein!                                   |");
-                    Console.WriteLine(" |" + (maxVersuche - versuche) + " Versuche übrig!                                        |");
+                    ZeigeZeile("Die Zahl ist zu klein!");
+                    ZeigeZeile($"{maxVersuche - versuche} Versuche übrig!");
                     ZeigeLinie();
 
                 }
                 else if (number > randomNumber)
                 {
                     ZeigeLinie();
-                    Console.WriteLine(" |Die Zahl ist zu groß!                                    |");
-                    Console.WriteLine(" |" + (maxVersuche - versuche) + " Versuche übrig!                                        |");
+                    ZeigeZeile("Die Zahl ist zu groß!");
+                    ZeigeZeile($"{maxVersuche - versuche} Versuche übrig!");
                     ZeigeLinie();
                 }
                 else
                 {
                     ZeigeLinie();
-                    Console.WriteLine(" |Du hast die Zahl erraten!                                |");
-                    Console.WriteLine(" |Du hast " + versuche + " Versuche gebraucht!             |");
+                    ZeigeZeile("Du hast die Zahl erraten!");
+                    ZeigeZeile($"Du hast {versuche} Versuche gebraucht!");
                     ZeigeLinie();
                     erraten = true;
                 }
             }
             else
             {
-                Console.WriteLine(" |Das war keine Zahl                                           |");
+                ZeigeZeile("Das war keine Zahl");
+                ZeigeLinie();
             }
         }
         if (!erraten)
         {
             ZeigeLinie();
-            Console.WriteLine(" |Du hast leider keine Versuche mehr übrig!                |");
-            Console.WriteLine(" |Die Zahl war: " + randomNumber + "                                         |");
+            ZeigeZeile("Du hast leider keine Versuche mehr übrig!");
+            ZeigeZeile($"Die Zahl war: {randomNumber}");
             ZeigeLinie();
         }
 
 
     }
+
+    static void ZeigeAuswahl()
+    {
+        ZeigeZeile("1 = Leicht (10 Versuche)");
+        ZeigeZeile("2 = Mittel (5 Versuche)");
+        ZeigeZeile("3 = Schwer (3 Versuche)");
+        ZeigeLinie();
+    }
     static void ZeigeLinie()
     {
-        Console.WriteLine(" |" + new string('-', 57) + "|");
+        Console.WriteLine(" |" + new string('-', BoxBreite) + "|");
     }
 
     static void ZeigeZeile(string text)
     {
-        Console.WriteLine(" |" + text.PadRight(57) + "|");
+        Console.WriteLine(" |" + text.PadRight(BoxBreite) + "|");
     }
 }
 
