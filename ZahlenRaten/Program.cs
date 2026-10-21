@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata.Ecma335;
 class Program
 {
     const int BoxBreite = 57;
@@ -64,6 +65,7 @@ class Program
         {
             schwierigkeit = Console.ReadLine();
 
+
             if (schwierigkeit == "1") maxVersuche = 10;
             else if (schwierigkeit == "2") maxVersuche = 5;
             else if (schwierigkeit == "3") maxVersuche = 3;
@@ -92,10 +94,10 @@ class Program
 
             if (isNum)
             {
-                int diff = Math.Abs(number - randomNumber);
                 versuche++;
+                string outcome = Pruefen(number, randomNumber);
 
-                if (number < randomNumber)
+                if (outcome == "kleiner")
                 {
                     ZeigeLinie();
                     ZeigeZeile("Die Zahl ist zu klein!");
@@ -103,24 +105,27 @@ class Program
                     ZeigeLinie();
 
                 }
-                else if (number > randomNumber)
+                else if (outcome == "groesser")
                 {
                     ZeigeLinie();
                     ZeigeZeile("Die Zahl ist zu groß!");
                     ZeigeZeile($"{maxVersuche - versuche} Versuche übrig!");
                     ZeigeLinie();
                 }
-                if (diff < 6 && number != randomNumber)
+
+                string huk = HeisKalt(number, randomNumber);
+                if (huk == "sehr")
                 {
                     ZeigeZeile("Du bist sehr nah dran");
                     ZeigeLinie();
                 }
-                else if (diff < 11 && number != randomNumber)
+                else if (huk == "nah")
                 {
                     ZeigeZeile("Du bist nah dran");
                     ZeigeLinie();
                 }
-                if (number == randomNumber)
+
+                if (outcome == "gleich")
                 {
                     ZeigeLinie();
                     ZeigeZeile("Du hast die Zahl erraten!");
@@ -141,14 +146,30 @@ class Program
             ZeigeZeile("Du hast leider keine Versuche mehr übrig!");
             ZeigeZeile($"Die Zahl war: {randomNumber}");
             ZeigeLinie();
-            return (0);
+            return 0;
         }
         else
         {
-            return (versuche);
+            return versuche;
         }
 
 
+    }
+
+    static string Pruefen(int number, int randomNumber)
+    {
+        if (number == randomNumber)
+        {
+            return "gleich";
+        }
+        else if (number < randomNumber)
+        {
+            return "kleiner";
+        }
+        else
+        {
+            return "groesser";
+        }
     }
 
     static void ZeigeAuswahl()
@@ -157,6 +178,20 @@ class Program
         ZeigeZeile("2 = Mittel (5 Versuche)");
         ZeigeZeile("3 = Schwer (3 Versuche)");
         ZeigeLinie();
+    }
+
+    static string HeisKalt(int number, int randomNumber)
+    {
+        int diff = Math.Abs(number - randomNumber);
+        if (diff < 6 && number != randomNumber)
+        {
+            return "sehr";
+        }
+        else if (diff < 11 && number != randomNumber)
+        {
+            return "nah";
+        }
+        else return "";
     }
 
     static void ZeigeStatistik(int siege, int loss, int bestLeistung)
