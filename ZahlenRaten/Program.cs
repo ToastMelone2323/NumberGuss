@@ -7,36 +7,46 @@ class Program
         bool nochmal = true;
         int siege = 0;
         int loss = 0;
+        int bestLeistung = 0;
 
 
 
         while (nochmal)
         {
             Console.Clear();
-            bool gewonnen = SpieleRunde();
+            int ergebnis = SpieleRunde();
 
-            if (gewonnen)
+            if (ergebnis > 0)
             {
                 siege++;
+                if (bestLeistung == 0 || ergebnis < bestLeistung)
+                {
+                    bestLeistung = ergebnis;
+                }
             }
             else
             {
                 loss++;
             }
-            ZeigeZeile($"Du hast {siege} Siege");
-            ZeigeZeile($"Du hast {loss} Niederlagen");
+            ZeigeStatistik(siege, loss, bestLeistung);
             ZeigeZeile("Willst du nochmal spielen? (j/n)");
             ZeigeLinie();
             string weiter = Console.ReadLine();
             nochmal = weiter == "j";
         }
         ZeigeZeile("Danke fürs Spielen!");
-        ZeigeZeile($"Deine gesamten Siege waren: {siege}");
-        ZeigeZeile($"Deine gesamten Niederlagen waren: {loss}");
         ZeigeLinie();
+        ZeigeStatistik(siege, loss, bestLeistung);
     }
 
-    static bool SpieleRunde()
+    static void ZeigeStatistik(int siege, int loss, int bestLeistung)
+    {
+        ZeigeZeile($"Deine gesamten Siege waren: {siege}");
+        ZeigeZeile($"Deine gesamten Niederlagen waren: {loss}");
+        if(bestLeistung > 0) ZeigeZeile($"Bestleistung: {bestLeistung} Versuche");
+        ZeigeLinie();
+    }
+    static int SpieleRunde()
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 101);
@@ -126,8 +136,13 @@ class Program
             ZeigeZeile("Du hast leider keine Versuche mehr übrig!");
             ZeigeZeile($"Die Zahl war: {randomNumber}");
             ZeigeLinie();
+            return (0);
         }
-        return (erraten);
+        else
+        {
+            return (versuche);
+        }
+
 
     }
 
