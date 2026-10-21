@@ -39,13 +39,6 @@ class Program
         ZeigeStatistik(siege, loss, bestLeistung);
     }
 
-    static void ZeigeStatistik(int siege, int loss, int bestLeistung)
-    {
-        ZeigeZeile($"Deine gesamten Siege waren: {siege}");
-        ZeigeZeile($"Deine gesamten Niederlagen waren: {loss}");
-        if(bestLeistung > 0) ZeigeZeile($"Bestleistung: {bestLeistung} Versuche");
-        ZeigeLinie();
-    }
     static int SpieleRunde()
     {
         Random random = new Random();
@@ -96,8 +89,10 @@ class Program
             input = Console.ReadLine();
             bool isNum = int.TryParse(input, out int number);
 
+
             if (isNum)
             {
+                int diff = Math.Abs(number - randomNumber);
                 versuche++;
 
                 if (number < randomNumber)
@@ -115,7 +110,17 @@ class Program
                     ZeigeZeile($"{maxVersuche - versuche} Versuche übrig!");
                     ZeigeLinie();
                 }
-                else
+                if (diff < 6 && number != randomNumber)
+                {
+                    ZeigeZeile("Du bist sehr nah dran");
+                    ZeigeLinie();
+                }
+                else if (diff < 11 && number != randomNumber)
+                {
+                    ZeigeZeile("Du bist nah dran");
+                    ZeigeLinie();
+                }
+                if (number == randomNumber)
                 {
                     ZeigeLinie();
                     ZeigeZeile("Du hast die Zahl erraten!");
@@ -153,6 +158,15 @@ class Program
         ZeigeZeile("3 = Schwer (3 Versuche)");
         ZeigeLinie();
     }
+
+    static void ZeigeStatistik(int siege, int loss, int bestLeistung)
+    {
+        ZeigeZeile($"Deine gesamten Siege waren: {siege}");
+        ZeigeZeile($"Deine gesamten Niederlagen waren: {loss}");
+        if (bestLeistung > 0) ZeigeZeile($"Bestleistung: {bestLeistung} Versuche");
+        ZeigeLinie();
+    }
+
     static void ZeigeLinie()
     {
         Console.WriteLine(" |" + new string('-', BoxBreite) + "|");
