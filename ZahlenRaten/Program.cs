@@ -5,24 +5,38 @@ class Program
     static void Main(string[] args)
     {
         bool nochmal = true;
+        int siege = 0;
+        int loss = 0;
+
 
 
         while (nochmal)
         {
             Console.Clear();
-            SpieleRunde();
+            bool gewonnen = SpieleRunde();
 
+            if (gewonnen)
+            {
+                siege++;
+            }
+            else
+            {
+                loss++;
+            }
+            ZeigeZeile($"Du hast {siege} Siege");
+            ZeigeZeile($"Du hast {loss} Niederlagen");
             ZeigeZeile("Willst du nochmal spielen? (j/n)");
             ZeigeLinie();
             string weiter = Console.ReadLine();
             nochmal = weiter == "j";
         }
-
         ZeigeZeile("Danke fürs Spielen!");
+        ZeigeZeile($"Deine gesamten Siege waren: {siege}");
+        ZeigeZeile($"Deine gesamten Niederlagen waren: {loss}");
         ZeigeLinie();
     }
 
-    static void SpieleRunde()
+    static bool SpieleRunde()
     {
         Random random = new Random();
         int randomNumber = random.Next(1, 101);
@@ -113,7 +127,7 @@ class Program
             ZeigeZeile($"Die Zahl war: {randomNumber}");
             ZeigeLinie();
         }
-
+        return (erraten);
 
     }
 
